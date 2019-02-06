@@ -22,8 +22,6 @@
 #include <cstdlib>
 using namespace std;
 LinkedList* simpleSortTotal(LinkedList* a, int c);
-void merge(LinkedList* a, double l, double m, double r);
-void simpleSort(LinkedList* a, double l, double r);
 LinkedList* sort_list(LinkedList* a);
 double distanceEarth(double lat1d, double lon1d, double lat2d, double lon2d);
 int main(){
@@ -64,7 +62,9 @@ int main(){
 			arr->add(airportArr->get(i));
 			lengthofarr ++;
 		}
-			arr = simpleSortTotal(arr, lengthofarr);
+			for (int i = 0;i<100;i++){
+				arr = sort_list(arr);
+			}
 		
 		cout << endl;
          for (int c=0; c < lengthofarr; c++){
@@ -190,68 +190,3 @@ LinkedList* sort_list(LinkedList* a) {
     return ret;
     }
 
-
-
-
-
-void simpleSort(LinkedList* a, double l, double r){
-	if (l < r) { 
-        // Same as (l+r)/2, but avoids overflow for 
-        // large l and h 
-        double m = l+(r-l)/2;
-        // Sort first and second halves 
-        simpleSort(a, l, m); 
-        simpleSort(a, m+1, r); 
-        merge(a, l, m, r); 
-    } 
-}
-
-void merge(LinkedList* a, double l, double m, double r){
-	 double i, j, k;
-    double n1 = m - l + 1; 
-    double n2 =  r - m; 
-	double ABlat = 30.1944;
-	double ABlong = 97.6700;
-    /* create temp lists */
-	LinkedList* L = new LinkedList();
-	LinkedList* R = new LinkedList();
-	for (i = 0;i< n1;i++){
-		L->add(a->get(l+i));
-	}
-	for (j = 0;j<n2;j++){
-		R->add(a->get(m+1+j));
-	}
-    /* Copy data to temp arrays L[] and R[] */
-
-    /* Merge the temp arrays back into arr[l..r]*/
-    i = 0; // Initial index of first subarray 
-    j = 0; // Initial index of second subarray 
-    k = l; // Initial index of merged subarray 
-    while (i < n1 && j < n2) { \
-        if (distanceEarth(ABlat, ABlong, L->get(i)->latitude, L->get(i)->longitude) <= distanceEarth(ABlat, ABlong, R->get(j)->latitude, R->get(j)->longitude)) { 
-			a->set(k, L->get(i)); 
-            i++; 
-        } 
-        else{ 
-            a->set(k, R->get(j));
-			j++; 
-        } 
-        k++;
-    } 
-  
-    /* Copy the remaining elements of L[], if there 
-       are any */
-    while (i < n1){ 
-        a->set(k, L->get(i));
-		i++; 
-        k++; 
-    } 
-  
-    /* Copy the remaining elements of R[], if there 
-       are any */
-    while (j < n2) { 
-        a->set(k, R->get(j));
-		j++; 
-        k++; 
-    } 
-}
